@@ -1,6 +1,14 @@
-# CLAUDE.md
+# DevStash
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+The developer knowledge hub for  snippets, commands , prompts, notes, files, images, links and custom types.
+
+## Context Files
+
+Read the Following to get the full context of the project:
+-@context/project-overview.md
+-@context/coding-standards.md
+-@context/ai-interaction.md
+-@context/current-feature.md
 
 ## Project
 
