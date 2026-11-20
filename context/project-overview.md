@@ -596,6 +596,17 @@ Freemium model.
 - **Main:** grid of collection cards, **background color** = the type the collection holds most of (falls back to `defaultTypeId`). Items show below as cards with a **border color** matching their type.
 - **Drawer:** items open and are created in a quick-access side drawer.
 
+### Dashboard UI reference
+
+Refer to the screenshots below for the dashboard UI. It does not have to be exact; use it as a reference.
+
+- Dashboard: `context/Dashboard-UI.png`
+- Item drawer: `context/Dashboard-UI-drawer.png`
+
+![Dashboard UI](./Dashboard-UI.png)
+
+![Dashboard UI with item drawer](./Dashboard-UI-drawer.png)
+
 ### Type colors & icons
 
 | Type    | Color                                                        | Hex       | Lucide icon  |
