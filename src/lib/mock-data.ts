@@ -1,7 +1,9 @@
 // Mock data for the dashboard UI. Single source of truth until the database exists.
 // Shapes loosely follow the Prisma models in context/project-overview.md.
 
-export const currentUser = {
+import type { Collection, CurrentUser, Item, ItemType } from "@/types/dashboard";
+
+export const currentUser: CurrentUser = {
   id: "user-1",
   name: "Jamie Davis",
   email: "demo@devstash.io",
@@ -9,7 +11,7 @@ export const currentUser = {
   workspace: "Studio workspace",
 };
 
-export const itemTypes = [
+export const itemTypes: ItemType[] = [
   { id: "type-snippet", name: "Snippet", slug: "snippets", icon: "Code", color: "#3b82f6", isSystem: true, count: 18 },
   { id: "type-prompt", name: "Prompt", slug: "prompts", icon: "Sparkles", color: "#8b5cf6", isSystem: true, count: 8 },
   { id: "type-note", name: "Note", slug: "notes", icon: "StickyNote", color: "#fde047", isSystem: true, count: 7 },
@@ -18,7 +20,7 @@ export const itemTypes = [
 ];
 
 // itemCount is the display count shown on the card (the items array below is only a sample).
-export const collections = [
+export const collections: Collection[] = [
   {
     id: "col-react",
     name: "React patterns",
@@ -57,7 +59,7 @@ export const collections = [
   },
 ];
 
-export const items = [
+export const items: Item[] = [
   {
     id: "item-1",
     title: "Debounce with useEffect",
@@ -126,5 +128,116 @@ export const items = [
     isFavorite: false,
     isPinned: false,
     createdAt: "2026-11-17T10:00:00Z",
+  },
+  {
+    id: "item-6",
+    title: "useLocalStorage hook",
+    description: "Persist React state to localStorage with a typed hook.",
+    itemTypeId: "type-snippet",
+    contentType: "TEXT",
+    content: "const [value, setValue] = useLocalStorage<string>(\"theme\", \"dark\");",
+    language: "typescript",
+    tags: ["react", "hooks"],
+    collectionIds: ["col-react"],
+    isFavorite: true,
+    isPinned: false,
+    createdAt: "2026-11-16T10:00:00Z",
+  },
+  {
+    id: "item-7",
+    title: "Explain this error",
+    description: "Walk through a stack trace and suggest the most likely fix.",
+    itemTypeId: "type-prompt",
+    contentType: "TEXT",
+    content: "Explain this error in plain English, then list the three most likely causes...",
+    language: null,
+    tags: ["debugging", "ai"],
+    collectionIds: ["col-ai"],
+    isFavorite: false,
+    isPinned: true,
+    createdAt: "2026-11-15T10:00:00Z",
+  },
+  {
+    id: "item-8",
+    title: "Free up port 3000",
+    description: "Find and stop the process listening on a port.",
+    itemTypeId: "type-command",
+    contentType: "TEXT",
+    content: "lsof -ti:3000 | xargs kill -9",
+    language: "bash",
+    tags: ["terminal", "macos"],
+    collectionIds: ["col-terminal"],
+    isFavorite: false,
+    isPinned: false,
+    createdAt: "2026-11-14T10:00:00Z",
+  },
+  {
+    id: "item-9",
+    title: "Next.js caching guide",
+    description: "How caching works in the App Router.",
+    itemTypeId: "type-link",
+    contentType: "URL",
+    url: "https://nextjs.org/docs/app/building-your-application/caching",
+    tags: ["next.js", "docs"],
+    collectionIds: ["col-refs"],
+    isFavorite: false,
+    isPinned: false,
+    createdAt: "2026-11-13T10:00:00Z",
+  },
+  {
+    id: "item-10",
+    title: "Weekly review template",
+    description: "A short checklist for planning the week ahead.",
+    itemTypeId: "type-note",
+    contentType: "TEXT",
+    content: "- What shipped?\n- What slipped?\n- Top three priorities next week",
+    language: null,
+    tags: ["workflow"],
+    collectionIds: ["col-refs"],
+    isFavorite: true,
+    isPinned: false,
+    createdAt: "2026-11-12T10:00:00Z",
+  },
+  {
+    id: "item-11",
+    title: "Tailwind class merge helper",
+    description: "Combine conditional class names without conflicts.",
+    itemTypeId: "type-snippet",
+    contentType: "TEXT",
+    content: "export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));",
+    language: "typescript",
+    tags: ["tailwind", "utils"],
+    collectionIds: ["col-react"],
+    isFavorite: false,
+    isPinned: true,
+    createdAt: "2026-11-11T10:00:00Z",
+  },
+  {
+    id: "item-12",
+    title: "Clean up Docker",
+    description: "Remove stopped containers, unused images and build cache.",
+    itemTypeId: "type-command",
+    contentType: "TEXT",
+    content: "docker system prune -af --volumes",
+    language: "bash",
+    tags: ["docker"],
+    collectionIds: ["col-terminal"],
+    isFavorite: false,
+    isPinned: false,
+    createdAt: "2026-11-10T10:00:00Z",
+  },
+  {
+    id: "item-13",
+    title: "Commit message writer",
+    description: "Turn a diff into a clear, conventional commit message.",
+    itemTypeId: "type-prompt",
+    contentType: "TEXT",
+    content: "Write a conventional commit message for the following diff...",
+    language: null,
+    tags: ["git", "ai"],
+    collectionIds: ["col-ai"],
+    isFavorite: true,
+    isPinned: false,
+    createdAt: "2026-11-09T10:00:00Z",
   },
 ];

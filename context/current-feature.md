@@ -2,25 +2,23 @@
 
 <!-- feature name and short description -->
 
-Dashboard UI Phase 2: the second of 3 phases for the dashboard UI layout. Spec: `context/features/dashboard-phase-2-spec.md`.
+Dashboard UI Phase 3: the last of 3 phases for the dashboard UI layout. Spec: `context/features/dashboard-phase-3-spec.md`.
 
 ## Status
 
 <!-- Not started | In Progress | Completed -->
 
-Completed
+In Progress
 
 ## Goals
 
 <!-- Goals and Requirements -->
 
-- Collapsible sidebar
-- Items/types with links to `/items/TYPE` (e.g. `/items/snippets`)
-- Favorite collections
-- Most recent collections
-- User avatar area at the bottom
-- Drawer icon to open/close sidebar
-- Always a drawer on mobile view
+- The main area to the right
+- Recent collections
+- Pinned items
+- 10 recent items
+- 4 stats cards at the top for number of items, collections, favorite items and favorite collections (not in the screenshot)
 
 ## Notes
 
@@ -28,8 +26,10 @@ Completed
 
 - Use the screenshot as a visual reference for how it should look.
 - Use data from `src/lib/mock-data.ts`; import it directly until the database is implemented.
-- References: `context/screenshots/dashboard-ui-main.png`, `context/project-overview.md`, `src/lib/mock-data.ts`, `context/features/dashboard-phase-1-spec.md`, `context/features/dashboard-phase-3-spec.md`.
+- References: `context/screenshots/dashboard-ui-main.png`, `context/project-overview.md`, `src/lib/mock-data.ts`, `context/features/dashboard-phase-1-spec.md`, `context/features/dashboard-phase-2-spec.md`.
+- The spec points to `src/lib/mock-data.js`, but the actual file is `src/lib/mock-data.ts`.
 - The screenshot path in the spec doesn't exist yet. The screenshots currently in `context/` are `Dashboard-UI.png` and `Dashboard-UI-drawer.png`.
+- The mock data currently has only 5 items (1 pinned), so "10 recent items" will need more sample items to show a full list.
 
 ## History
 
