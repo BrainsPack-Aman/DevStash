@@ -2,34 +2,35 @@
 
 <!-- feature name and short description -->
 
-Dashboard UI Phase 3: the last of 3 phases for the dashboard UI layout. Spec: `context/features/dashboard-phase-3-spec.md`.
+Prisma + Neon PostgreSQL setup: set up Prisma ORM with a serverless Neon PostgreSQL database. Spec: `context/features/database-spec.md`.
 
 ## Status
 
 <!-- Not started | In Progress | Completed -->
 
-Completed
+In Progress
 
 ## Goals
 
 <!-- Goals and Requirements -->
 
-- The main area to the right
-- Recent collections
-- Pinned items
-- 10 recent items
-- 4 stats cards at the top for number of items, collections, favorite items and favorite collections (not in the screenshot)
+- Use Neon PostgreSQL (serverless)
+- Set up Prisma ORM (Prisma 7)
+- Create the initial schema based on the data models in `context/project-overview.md` (this will evolve)
+- Include the NextAuth models (Account, Session, VerificationToken)
+- Add appropriate indexes and cascade deletes
 
 ## Notes
 
 <!-- Any extra notes -->
 
-- Use the screenshot as a visual reference for how it should look.
-- Use data from `src/lib/mock-data.ts`; import it directly until the database is implemented.
-- References: `context/screenshots/dashboard-ui-main.png`, `context/project-overview.md`, `src/lib/mock-data.ts`, `context/features/dashboard-phase-1-spec.md`, `context/features/dashboard-phase-2-spec.md`.
-- The spec points to `src/lib/mock-data.js`, but the actual file is `src/lib/mock-data.ts`.
-- The screenshot path in the spec doesn't exist yet. The screenshots currently in `context/` are `Dashboard-UI.png` and `Dashboard-UI-drawer.png`.
-- The mock data currently has only 5 items (1 pinned), so "10 recent items" will need more sample items to show a full list.
+- Use Prisma 7, which has breaking changes. Read the full upgrade guide first: https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7
+- Setup guide: https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/prisma-postgres (fetch the latest Prisma docs at https://prisma.io/docs).
+- There is a development branch in Neon, used through `DATABASE_URL`, and a separate production branch. Always create migrations with `prisma migrate dev` and never push the schema directly (no `db push`) unless specified.
+- Database standards are in `context/coding-standards.md`: use Prisma for all database operations, run `prisma migrate status` before committing, and run `prisma migrate deploy` before the app starts in production.
+- References: `context/project-overview.md`, `context/coding-standards.md`, `context/features/database-spec.md`.
+- The Neon connection string (`DATABASE_URL`) is needed before migrations can run. It belongs in `.env`, which is git-ignored.
+- The dashboard still reads from `src/lib/mock-data.ts`; switching it to the database is a separate step.
 
 ## History
 
