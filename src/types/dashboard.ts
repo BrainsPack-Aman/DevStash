@@ -48,3 +48,25 @@ export interface DashboardStats {
   favoriteItems: number;
   favoriteCollections: number;
 }
+
+export interface CollectionTypeSummary {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  count: number;
+}
+
+// A collection as read from the database. Its look comes from the item types inside it.
+export interface DashboardCollection {
+  id: string;
+  name: string;
+  description: string;
+  isFavorite: boolean;
+  itemCount: number;
+  updatedAt: string;
+  // most-used type (falls back to the collection's default type when empty)
+  primaryType: CollectionTypeSummary | null;
+  // every type present, most-used first
+  types: CollectionTypeSummary[];
+}
