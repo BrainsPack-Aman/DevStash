@@ -2,7 +2,7 @@
 
 <!-- feature name and short description -->
 
-Dashboard collections: replace the dummy collection data in the dashboard main area (right side) with real data from the Neon database via Prisma. Spec: `context/dashboard-collections-spec.md`.
+Dashboard items: replace the dummy item data in the dashboard main area (right side) with real data from the Neon database via Prisma, for both pinned items and recent items. Spec: `context/dashboard-items-spec.md`.
 
 ## Status
 
@@ -14,23 +14,25 @@ Completed
 
 <!-- Goals and Requirements -->
 
-- Replace the mock collection data shown in the dashboard main area (the 6 recent collection cards) with data from the Neon database using Prisma, instead of `src/lib/mock-data.ts`
-- Create `src/lib/db/collections.ts` with the data fetching functions
-- Fetch collections directly in the server component
-- Collection card border color is derived from the most-used content type in that collection
-- Show small icons of all the types present in that collection
-- Keep the current design (reference screenshot: `context/screenshots/dashboard-ui-main.png`)
-- Update the collection stats display
-- Do not add the items underneath the collections yet (a later step)
+- Replace the mock item data shown in the dashboard main area (pinned items and recent items) with data from the Neon database using Prisma, instead of `src/lib/mock-data.ts`
+- Create `src/lib/db/items.ts` with the data fetching functions
+- Fetch items directly in the server component
+- Item card icon and border are derived from the item type
+- Keep showing the item type tag and everything else currently on the card (title, description, preview, tags, pinned and favorite markers, date). Reference screenshot: `context/screenshots/dashboard-ui-main.png`
+- If there are no pinned items, show nothing in that section (no heading, no empty state)
+- Update the stats display so the item counts (total items, favorite items) come from the database
+- Keep the current design and layout
 
 ## Notes
 
 <!-- Any extra notes -->
 
-- Spec: `context/dashboard-collections-spec.md`. Other references: `context/project-overview.md` (data models), `prisma/schema.prisma` and `src/lib/prisma.ts` (runtime client).
-- Only the collections part of the dashboard moves to the database. Stats for items, pinned items and recent items stay on the mock data until their own steps.
-- A collection has no type of its own: derive the border color and the type icons from the types of the items inside it (most-used type wins for the color).
-- The seed (`npm run db:seed`) provides the demo user (`demo@devstash.io`) and 5 sample collections to test against.
+- Spec: `context/dashboard-items-spec.md`. Other references: `context/project-overview.md` (data models), `prisma/schema.prisma`, `src/lib/prisma.ts` (runtime client) and `src/lib/db/collections.ts` (the pattern to follow).
+- The spec's last requirement says "Update collection stats display", which looks like a copy of the previous spec. Collection stats already come from the database, so this is read as updating the item stats (Items and Favorite items cards).
+- Follow the collections work: fetch in async server components wrapped in Suspense (Cache Components is on), and use the seeded demo user (`demo@devstash.io`) until auth exists.
+- The item card currently has no type-colored border. Add one matching the collection card's left accent (type color on the left edge) so the card, icon and border all follow the item type.
+- Item tags (`ItemTag`) and the item's collections come from relations; select only what the card needs.
+- The sidebar (item type counts, collections) still reads from the mock data and is a separate step.
 - Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/` (Next.js 16 has breaking changes).
 
 ## History
@@ -45,3 +47,4 @@ Completed
 - **Prisma + Neon PostgreSQL setup:** Set up Prisma 7 with a serverless Neon PostgreSQL database. Added the schema from the project data models, including the NextAuth models (Account, Session, VerificationToken), indexes and cascade deletes. Created the initial migration and applied it to the development database, and added an idempotent seed for the system item types. Schema changes always go through migrations, never `db push`. The dashboard still reads from the mock data.
 - **Seed data:** Extended `prisma/seed.ts` to populate the database with sample data for development and demos: a demo user (`demo@devstash.io`, password hashed with bcryptjs at 12 rounds), the 7 system item types, and 5 collections (React Patterns, AI Workflows, DevOps, Terminal Commands, Design Resources) holding 18 snippets, prompts, commands and links. The seed is idempotent and safe to re-run, and is for development and demos only, never production.
 - **Dashboard collections:** Replaced the mock collection data in the dashboard main area with real data from Neon via Prisma. Added `src/lib/db/collections.ts` (recent collections and collection stats), fetched in server components inside Suspense. Collection cards show a left accent border in the color of the most-used item type, small icons for every type in the collection, and an updated item count. Added staggered entrance and hover animations to the collection, item and stats cards and the dashboard sections, all respecting reduced motion. Items, pinned items and the sidebar still read from the mock data.
+- **Dashboard items:** Replaced the mock pinned and recent items in the dashboard main area with real data from Neon via Prisma. Added `src/lib/db/items.ts` (pinned items, 10 most recent items and item stats), fetched in async server components inside Suspense with skeleton fallbacks. Item cards take their icon, type tag and a left accent border from the item type, and the pinned section renders nothing when there are no pinned items. All four stats cards now come from the database, and the unused `src/lib/dashboard-data.ts` was removed. The sidebar still reads from the mock data.
