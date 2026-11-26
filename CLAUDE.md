@@ -24,7 +24,7 @@ npm run lint    # ESLint (flat config in eslint.config.mjs)
 
 npm run db:migrate   # prisma migrate dev: create + apply a migration (never use db push)
 npm run db:status    # prisma migrate status
-npm run db:seed      # prisma db seed: system item types (idempotent, safe to re-run)
+npm run db:seed      # prisma db seed: system item types + demo user (demo@devstash.io) with sample collections and items (idempotent, safe to re-run; dev/demo only, never production)
 npm run db:test      # read-only database check (connection, tables, migrations, row counts)
 npm run db:deploy    # prisma migrate deploy (production)
 npm run db:studio    # Prisma Studio
