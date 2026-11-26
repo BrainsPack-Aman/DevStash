@@ -11,12 +11,15 @@ function getPreview(item: Item): string | undefined {
   return undefined;
 }
 
-export default function ItemCard({ item }: { item: Item }) {
+export default function ItemCard({ item, index = 0 }: { item: Item; index?: number }) {
   const type = getItemType(item.itemTypeId);
   const preview = getPreview(item);
 
   return (
-    <article className="flex flex-col gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-foreground/25">
+    <article
+      style={{ animationDelay: `${index * 60}ms` }}
+      className="flex flex-col gap-3 rounded-xl border bg-card p-4 hover:border-foreground/25 animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500 transition-[transform,box-shadow,border-color] hover:-translate-y-0.5 hover:shadow-lg motion-reduce:animate-none motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+    >
       <div className="flex items-center justify-between gap-2">
         {type && (
           <span

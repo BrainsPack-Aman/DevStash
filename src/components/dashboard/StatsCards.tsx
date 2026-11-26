@@ -19,12 +19,13 @@ const STATS: StatDefinition[] = [
 export default function StatsCards({ stats }: { stats: DashboardStats }) {
   return (
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-      {STATS.map(({ key, label, icon: Icon, iconClassName }) => (
+      {STATS.map(({ key, label, icon: Icon, iconClassName }, index) => (
         <div
           key={key}
-          className="flex flex-col items-start gap-3 rounded-xl border bg-card p-4 sm:flex-row sm:items-center"
+          style={{ animationDelay: `${index * 60}ms` }}
+          className="group flex flex-col items-start gap-3 rounded-xl border bg-card p-4 hover:border-foreground/25 sm:flex-row sm:items-center animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500 transition-[transform,box-shadow,border-color] hover:-translate-y-0.5 hover:shadow-lg motion-reduce:animate-none motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
-          <div className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${iconClassName}`}>
+          <div className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-110 motion-reduce:transition-none ${iconClassName}`}>
             <Icon className="size-5" />
           </div>
           <div className="min-w-0">

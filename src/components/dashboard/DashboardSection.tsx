@@ -15,7 +15,7 @@ export default function DashboardSection({
   children,
 }: DashboardSectionProps) {
   return (
-    <section className="space-y-4">
+    <section className="animate-in fade-in space-y-4 duration-500 motion-reduce:animate-none">
       <div className="flex items-end justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
@@ -24,10 +24,10 @@ export default function DashboardSection({
         {viewAllHref && (
           <Link
             href={viewAllHref}
-            className="inline-flex shrink-0 items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="group inline-flex shrink-0 items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             View all
-            <ArrowRight className="size-3.5" />
+            <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none" />
           </Link>
         )}
       </div>

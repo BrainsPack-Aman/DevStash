@@ -2,37 +2,36 @@
 
 <!-- feature name and short description -->
 
-Seed data: extend the seed script (`prisma/seed.ts`) to populate the database with sample data for development and demos. Spec: `context/seed-spec.md`.
+Dashboard collections: replace the dummy collection data in the dashboard main area (right side) with real data from the Neon database via Prisma. Spec: `context/dashboard-collections-spec.md`.
 
 ## Status
 
 <!-- Not started | In Progress | Completed -->
 
-Completed
+In Progress
 
 ## Goals
 
 <!-- Goals and Requirements -->
 
-- Demo user: email `demo@devstash.io`, name `Demo User`, password `12345678` (hashed with bcryptjs, 12 rounds), `isPro: false`, `emailVerified` set to the current date
-- System item types (all `isSystem: true`, icons are Lucide component names): snippet (Code, #3b82f6), prompt (Sparkles, #8b5cf6), command (Terminal, #f97316), note (StickyNote, #fde047), file (File, #6b7280), image (Image, #ec4899), link (Link, #10b981)
-- Collection **React Patterns** ("Reusable React patterns and hooks"): 3 TypeScript snippets covering custom hooks (useDebounce, useLocalStorage, etc.), component patterns (context providers, compound components) and utility functions
-- Collection **AI Workflows** ("AI prompts and workflow automations"): 3 prompts covering code review, documentation generation and refactoring assistance
-- Collection **DevOps** ("Infrastructure and deployment resources"): 1 snippet (Docker, CI/CD config), 1 command (deployment scripts) and 2 links to real documentation URLs
-- Collection **Terminal Commands** ("Useful shell commands for everyday development"): 4 commands covering git operations, Docker commands, process management and package manager utilities
-- Collection **Design Resources** ("UI/UX resources and references"): 4 links to real URLs covering CSS/Tailwind references, component libraries, design systems and icon libraries
+- Replace the mock collection data shown in the dashboard main area (the 6 recent collection cards) with data from the Neon database using Prisma, instead of `src/lib/mock-data.ts`
+- Create `src/lib/db/collections.ts` with the data fetching functions
+- Fetch collections directly in the server component
+- Collection card border color is derived from the most-used content type in that collection
+- Show small icons of all the types present in that collection
+- Keep the current design (reference screenshot: `context/screenshots/dashboard-ui-main.png`)
+- Update the collection stats display
+- Do not add the items underneath the collections yet (a later step)
 
 ## Notes
 
 <!-- Any extra notes -->
 
-- Spec: `context/seed-spec.md` (it sits in `context/`, not `context/features/`). Other references: `context/project-overview.md` (data models) and `prisma/schema.prisma`.
-- `prisma/seed.ts` already exists and seeds only the 7 system item types, idempotently (find-then-create). This feature extends it. Keep the whole seed safe to re-run: no duplicate users, collections or items.
-- `bcryptjs` is not installed yet and will need to be added (with its types if required).
-- The spec lists type names in lowercase singular (`snippet`), while the existing seed uses `Snippet` with slug `snippets` (which the sidebar links to as `/items/snippets`). Keep the existing names and slugs unless told otherwise.
-- The demo password is for development and demos only. Never seed it into the production database.
-- Run the seed with `npm run db:seed` against the development database. Schema changes still go through `prisma migrate`, never `db push`.
-- The dashboard still reads from `src/lib/mock-data.ts`; switching it to the database is a separate step.
+- Spec: `context/dashboard-collections-spec.md`. Other references: `context/project-overview.md` (data models), `prisma/schema.prisma` and `src/lib/prisma.ts` (runtime client).
+- Only the collections part of the dashboard moves to the database. Stats for items, pinned items and recent items stay on the mock data until their own steps.
+- A collection has no type of its own: derive the border color and the type icons from the types of the items inside it (most-used type wins for the color).
+- The seed (`npm run db:seed`) provides the demo user (`demo@devstash.io`) and 5 sample collections to test against.
+- Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/` (Next.js 16 has breaking changes).
 
 ## History
 
