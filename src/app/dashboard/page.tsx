@@ -4,13 +4,13 @@ import CollectionCard from "@/components/dashboard/CollectionCard";
 import DashboardSection from "@/components/dashboard/DashboardSection";
 import ItemCard from "@/components/dashboard/ItemCard";
 import StatsCards from "@/components/dashboard/StatsCards";
-import { getPinnedItems, getRecentItems, getStats } from "@/lib/dashboard-data";
 import { getCollectionStats, getRecentCollections } from "@/lib/db/collections";
+import { getItemStats, getPinnedItems, getRecentItems } from "@/lib/db/items";
 import { currentUser } from "@/lib/mock-data";
 
 async function DashboardStatsCards() {
-  const collectionStats = await getCollectionStats();
-  return <StatsCards stats={{ ...getStats(), ...collectionStats }} />;
+  const [itemStats, collectionStats] = await Promise.all([getItemStats(), getCollectionStats()]);
+  return <StatsCards stats={{ ...itemStats, ...collectionStats }} />;
 }
 
 async function RecentCollections() {
@@ -24,10 +24,36 @@ async function RecentCollections() {
   );
 }
 
-function CollectionsSkeleton() {
+async function PinnedItems() {
+  const pinnedItems = await getPinnedItems();
+  if (pinnedItems.length === 0) return null;
+
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-      {Array.from({ length: 6 }, (_, i) => (
+    <DashboardSection title="Pinned items" description="Your go-to snippets, prompts and notes.">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {pinnedItems.map((item, index) => (
+          <ItemCard key={item.id} item={item} index={index} />
+        ))}
+      </div>
+    </DashboardSection>
+  );
+}
+
+async function RecentItems() {
+  const recentItems = await getRecentItems();
+  return (
+    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      {recentItems.map((item, index) => (
+        <ItemCard key={item.id} item={item} index={index} />
+      ))}
+    </div>
+  );
+}
+
+function CardsSkeleton({ count, className }: { count: number; className: string }) {
+  return (
+    <div className={className}>
+      {Array.from({ length: count }, (_, i) => (
         <div key={i} className="h-36 animate-pulse rounded-xl border bg-card" />
       ))}
     </div>
@@ -36,8 +62,6 @@ function CollectionsSkeleton() {
 
 export default function DashboardPage() {
   const firstName = currentUser.name.split(" ")[0];
-  const pinnedItems = getPinnedItems();
-  const recentItems = getRecentItems();
 
   return (
     <div className="mx-auto max-w-6xl space-y-10">
@@ -55,27 +79,23 @@ export default function DashboardPage() {
         description="Spaces for the things you want to keep close."
         viewAllHref="/collections"
       >
-        <Suspense fallback={<CollectionsSkeleton />}>
+        <Suspense
+          fallback={<CardsSkeleton count={6} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3" />}
+        >
           <RecentCollections />
         </Suspense>
       </DashboardSection>
 
-      {pinnedItems.length > 0 && (
-        <DashboardSection title="Pinned items" description="Your go-to snippets, prompts and notes.">
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {pinnedItems.map((item, index) => (
-              <ItemCard key={item.id} item={item} index={index} />
-            ))}
-          </div>
-        </DashboardSection>
-      )}
+      <Suspense fallback={null}>
+        <PinnedItems />
+      </Suspense>
 
       <DashboardSection title="Recent items" description="Pick up where you left off.">
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          {recentItems.map((item, index) => (
-            <ItemCard key={item.id} item={item} index={index} />
-          ))}
-        </div>
+        <Suspense
+          fallback={<CardsSkeleton count={6} className="grid gap-3 md:grid-cols-2 xl:grid-cols-3" />}
+        >
+          <RecentItems />
+        </Suspense>
       </DashboardSection>
     </div>
   );

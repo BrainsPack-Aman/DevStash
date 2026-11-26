@@ -70,3 +70,19 @@ export interface DashboardCollection {
   // every type present, most-used first
   types: CollectionTypeSummary[];
 }
+
+// An item as read from the database. Its look comes from its item type.
+export interface DashboardItem {
+  id: string;
+  title: string;
+  description: string;
+  contentType: "TEXT" | "URL" | "FILE";
+  content: string | null;
+  language: string | null;
+  url: string | null;
+  isFavorite: boolean;
+  isPinned: boolean;
+  createdAt: string;
+  type: { name: string; icon: string; color: string };
+  tags: string[];
+}
