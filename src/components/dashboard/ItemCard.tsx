@@ -2,6 +2,7 @@ import { Pin, Star } from "lucide-react";
 
 import ItemTypeIcon from "@/components/dashboard/ItemTypeIcon";
 import { formatShortDate } from "@/lib/format";
+import { itemColorVar } from "@/lib/item-type-colors";
 import type { DashboardItem } from "@/types/dashboard";
 
 function getPreview(item: DashboardItem): string | undefined {
@@ -21,8 +22,8 @@ export default function ItemCard({ item, index = 0 }: { item: DashboardItem; ind
     >
       <div className="flex items-center justify-between gap-2">
         <span
-          className="inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-medium"
-          style={{ backgroundColor: `${type.color}1f`, color: type.color }}
+          className="text-item inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-medium"
+          style={{ ...itemColorVar(type.color), backgroundColor: `${type.color}1f` }}
         >
           <ItemTypeIcon iconName={type.icon} className="size-3.5" />
           {type.name}
@@ -30,7 +31,7 @@ export default function ItemCard({ item, index = 0 }: { item: DashboardItem; ind
         <div className="flex items-center gap-2 text-muted-foreground">
           {item.isPinned && <Pin className="size-3.5" aria-label="Pinned" />}
           {item.isFavorite && (
-            <Star className="size-3.5 fill-yellow-400 text-yellow-400" aria-label="Favorite" />
+            <Star className="size-3.5 fill-favorite text-favorite" aria-label="Favorite" />
           )}
           <span className="text-xs">{formatShortDate(item.createdAt)}</span>
         </div>

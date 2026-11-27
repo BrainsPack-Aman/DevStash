@@ -7,6 +7,7 @@ import { ChevronDown, Folder, PanelLeft, Star, type LucideIcon } from "lucide-re
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
+import { itemColorVar } from "@/lib/item-type-colors";
 import { ITEM_TYPE_ICONS } from "@/lib/item-type-icons";
 import { currentUser } from "@/lib/mock-data";
 import type { SidebarSectionKey, SidebarSectionsOpen } from "@/lib/sidebar-cookie";
@@ -49,7 +50,7 @@ function buildCollectionSections(collections: Collection[]): CollectionSection[]
       key: "favorites",
       title: "Favorites",
       icon: Star,
-      iconClassName: "fill-yellow-400 text-yellow-400",
+      iconClassName: "fill-favorite text-favorite",
       showCount: false,
       viewAllHref: FAVORITE_COLLECTIONS_HREF,
       viewAllLabel: "View all favorites",
@@ -99,22 +100,21 @@ function CollectionList({ section, collections: list, onNavigate }: CollectionLi
   const Icon = section.icon;
   return (
     <ul className="space-y-0.5">
-      {list.map((collection) => (
-        <li key={collection.id}>
-          <Link href={`/collections/${collection.id}`} onClick={onNavigate} className={LINK_CLASS}>
-            <Icon
-              className={`size-4 shrink-0 ${section.iconClassName}`}
-              style={
-                section.showTypeColor && collection.primaryType
-                  ? { color: collection.primaryType.color }
-                  : undefined
-              }
-            />
-            <span className="flex-1 truncate">{collection.name}</span>
-            {section.showCount && <span className="text-xs">{collection.itemCount}</span>}
-          </Link>
-        </li>
-      ))}
+      {list.map((collection) => {
+        const typeColor = section.showTypeColor ? collection.primaryType?.color : undefined;
+        return (
+          <li key={collection.id}>
+            <Link href={`/collections/${collection.id}`} onClick={onNavigate} className={LINK_CLASS}>
+              <Icon
+                className={`size-4 shrink-0 ${section.iconClassName} ${typeColor ? "text-item" : ""}`}
+                style={typeColor ? itemColorVar(typeColor) : undefined}
+              />
+              <span className="flex-1 truncate">{collection.name}</span>
+              {section.showCount && <span className="text-xs">{collection.itemCount}</span>}
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -242,7 +242,9 @@ export default function Sidebar({
                     title={`${type.name}s`}
                     className={linkClass}
                   >
-                    {Icon && <Icon className="size-4 shrink-0" style={{ color: type.color }} />}
+                    {Icon && (
+                      <Icon className="text-item size-4 shrink-0" style={itemColorVar(type.color)} />
+                    )}
                     {!collapsed && (
                       <>
                         <span className="flex flex-1 items-center gap-2">
