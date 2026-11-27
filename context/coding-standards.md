@@ -46,6 +46,7 @@ Example v4 configuration:
 @theme {
   --color-primary: oklch(50% 0.2 250);
 }
+```
 
 ## File Organization
 
@@ -67,7 +68,7 @@ Example v4 configuration:
 
 - Tailwind CSS for all styling
 - Use shadcn/ui components where applicable
-- No inline styles
+- No inline styles, except for values only known at runtime (e.g. item type colors, animation delays)
 - Dark mode first, light mode as option
 
 ## Database
@@ -94,4 +95,3 @@ Example v4 configuration:
 - No commented-out code unless specified
 - No unused imports or variables
 - Keep functions under 50 lines when possible
-```

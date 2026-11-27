@@ -1,4 +1,4 @@
-// Sample data for development and demos (see context/seed-spec.md).
+// Sample data for development and demos (see context/features/seed-spec.md).
 // Code samples are arrays of lines joined with "\n" so they stay readable here.
 
 export interface SystemItemType {

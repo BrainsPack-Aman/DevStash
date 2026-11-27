@@ -110,7 +110,7 @@ Search across:
 - 📝 Markdown editor for text types
 - 📤 File upload for `file` / `image` types
 - 📦 Export data in multiple formats (JSON / ZIP — Pro)
-- 🌙 Dark mode by default, light mode optional
+- 🎨 Selectable color themes, each with a light and a dark mode (dark by default)
 - ➕ Add/remove an item to/from multiple collections
 - 🔎 See which collections an item belongs to
 
@@ -188,7 +188,9 @@ erDiagram
     }
 ```
 
-### Prisma Schema (draft)
+### Prisma Schema
+
+> The source of truth is `prisma/schema.prisma`.
 
 ```prisma
 // prisma/schema.prisma
@@ -260,6 +262,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -269,6 +272,8 @@ model Session {
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -317,10 +322,12 @@ model Item {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId])
   @@index([userId, itemTypeId])
   @@index([userId, isPinned])
+  @@index([userId, isFavorite])
+  @@index([userId, createdAt])
   @@index([userId, lastUsedAt])
+  @@index([itemTypeId])
 }
 
 model ItemType {
@@ -359,7 +366,9 @@ model Collection {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId])
+  @@index([userId, updatedAt])
+  @@index([userId, isFavorite])
+  @@index([defaultTypeId])
 }
 
 model ItemCollection {
@@ -400,10 +409,16 @@ model ItemTag {
 
 ### Prisma config (Prisma 7)
 
+The migration URL is `DIRECT_URL` when set, otherwise `DATABASE_URL` with `-pooler` removed. `scripts/neon-relay.mjs` resolves it, and relays the connection on networks whose DNS can't resolve Neon hosts.
+
 ```ts
 // prisma.config.ts
 import "dotenv/config";
-import { defineConfig, env } from "prisma/config";
+import { defineConfig } from "prisma/config";
+
+import { resolveDatabaseUrl } from "./scripts/neon-relay.mjs";
+
+const url = await resolveDatabaseUrl();
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -411,17 +426,15 @@ export default defineConfig({
     path: "prisma/migrations",
     seed: "tsx prisma/seed.ts",
   },
-  datasource: {
-    url: env("DATABASE_URL"),
-  },
+  datasource: { url },
 });
 ```
 
 ### Seed data — system item types
 
 ```ts
-// prisma/seed.ts (excerpt)
-const systemTypes = [
+// prisma/seed-data.ts (excerpt), inserted by prisma/seed.ts
+export const SYSTEM_ITEM_TYPES: SystemItemType[] = [
   { name: "Snippet", slug: "snippets", icon: "Code",       color: "#3b82f6" },
   { name: "Prompt",  slug: "prompts",  icon: "Sparkles",   color: "#8b5cf6" },
   { name: "Note",    slug: "notes",    icon: "StickyNote", color: "#fde047" },
@@ -429,7 +442,7 @@ const systemTypes = [
   { name: "Link",    slug: "links",    icon: "Link",       color: "#10b981" },
   { name: "File",    slug: "files",    icon: "File",       color: "#6b7280" },
   { name: "Image",   slug: "images",   icon: "Image",      color: "#ec4899" },
-].map((t) => ({ ...t, isSystem: true, userId: null }));
+];
 ```
 
 > ⚠️ Postgres treats `NULL`s as distinct in unique constraints, so `@@unique([userId, slug])` will **not** stop duplicate system types. Make the seed idempotent (find-then-create), or add a partial unique index in a migration.
@@ -473,6 +486,7 @@ const systemTypes = [
 ```bash
 # Database
 DATABASE_URL=
+DIRECT_URL=          # optional, non-pooled string used for migrations
 
 # Auth
 AUTH_SECRET=
@@ -565,6 +579,8 @@ Freemium model.
 
 - Modern, minimal, developer-focused
 - Dark mode by default, light mode optional
+- Theme selector in the top bar: Default, Vercel, Claude, Dracula, Nord, Monokai, GitHub and Midnight, each with its own light and dark mode. The choice is saved in the browser
+- Colors come from CSS tokens (`src/app/globals.css` and `src/app/themes.css`), registered in `src/lib/theme.ts`
 - Clean typography, generous whitespace
 - Subtle borders and shadows
 - Syntax highlighting for code blocks
@@ -575,25 +591,24 @@ Freemium model.
 ```
 ┌──────────────┬────────────────────────────────────────────┐
 │  SIDEBAR     │  MAIN                                      │
-│  (collapse)  │                                            │
-│              │  ┌─────────┐ ┌─────────┐ ┌─────────┐       │
-│  Types       │  │Collection│ │Collection│ │Collection│    │
-│  · Snippets  │  │ (bg =    │ │ (bg =    │ │ (bg =    │    │
-│  · Prompts   │  │ dominant │ │ dominant │ │ dominant │    │
-│  · Commands  │  │ type)    │ │ type)    │ │ type)    │    │
-│  · Notes     │  └─────────┘ └─────────┘ └─────────┘       │
-│  · Links     │                                            │
-│  · Files     │  Items                                     │
-│  · Images    │  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐       │
-│              │  │border│ │border│ │border│ │border│       │
-│  Collections │  │=type │ │=type │ │=type │ │=type │       │
-│  · Latest…   │  └──────┘ └──────┘ └──────┘ └──────┘       │
+│  (collapse)  │  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐  stats    │
+│              │  └─────┘ └─────┘ └─────┘ └─────┘           │
+│  Types       │                                            │
+│  · Snippets  │  Recent collections                        │
+│  · Prompts   │  ┃ Collection  ┃ Collection  ┃ Collection  │
+│  · Commands  │  (left border = most-used type)            │
+│  · Notes     │                                            │
+│  · Files     │  Pinned items / Recent items               │
+│  · Images    │  ┃ Item  ┃ Item  ┃ Item                    │
+│  · Links     │  (left border = item type)                 │
 │              │                                            │
+│  Favorites   │                                            │
+│  Recent      │                                            │
 └──────────────┴───────────────────────────── [ Drawer ] ───┘
 ```
 
-- **Sidebar:** item types (linking to `/items/<type>`) and latest collections. Collapsible.
-- **Main:** grid of collection cards, **background color** = the type the collection holds most of (falls back to `defaultTypeId`). Items show below as cards with a **border color** matching their type.
+- **Sidebar:** item types (linking to `/items/<type>`), favorite collections and recent collections. Collapsible.
+- **Main:** stats cards, then collection cards with a **left accent border** in the color of the type the collection holds most of (falls back to `defaultTypeId`) and an icon for every type in it. Pinned and recent items follow, as cards with a left border matching their type.
 - **Drawer:** items open and are created in a quick-access side drawer.
 
 ### Dashboard UI reference
@@ -619,19 +634,21 @@ Refer to the screenshots below for the dashboard UI. It does not have to be exac
 | Image   | ![#ec4899](https://placehold.co/15x15/ec4899/ec4899.png)     | `#ec4899` | `Image`      |
 | Link    | ![#10b981](https://placehold.co/15x15/10b981/10b981.png)     | `#10b981` | `Link`       |
 
-```ts
-// src/lib/item-types.ts
-import { Code, Sparkles, Terminal, StickyNote, File, Image, Link } from "lucide-react";
+Colors are stored on each item type in the database. The code only maps icon names to Lucide components:
 
-export const ITEM_TYPE_META = {
-  snippet: { icon: Code,       color: "#3b82f6" },
-  prompt:  { icon: Sparkles,   color: "#8b5cf6" },
-  command: { icon: Terminal,   color: "#f97316" },
-  note:    { icon: StickyNote, color: "#fde047" },
-  file:    { icon: File,       color: "#6b7280" },
-  image:   { icon: Image,      color: "#ec4899" },
-  link:    { icon: Link,       color: "#10b981" },
-} as const;
+```ts
+// src/lib/item-type-icons.ts
+import { Code, File, Image, Link, Sparkles, StickyNote, Terminal, type LucideIcon } from "lucide-react";
+
+export const ITEM_TYPE_ICONS: Record<string, LucideIcon> = {
+  Code,
+  File,
+  Image,
+  Sparkles,
+  StickyNote,
+  Terminal,
+  Link,
+};
 ```
 
 ### Responsive

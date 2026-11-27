@@ -16,4 +16,4 @@ If there are no pinned items, nothing should display there.
 
 ## References
 
-Check the `@context/screenshots/dashboard-ui-main.png` screenshot if needed, but layout and design is already there.
+Check the `@context/Dashboard-UI.png` screenshot if needed, but layout and design is already there.

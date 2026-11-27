@@ -16,32 +16,6 @@ export interface ItemType {
   count: number;
 }
 
-export interface Collection {
-  id: string;
-  name: string;
-  description: string;
-  isFavorite: boolean;
-  defaultTypeId: string;
-  itemCount: number;
-  updatedAt: string;
-}
-
-export interface Item {
-  id: string;
-  title: string;
-  description: string;
-  itemTypeId: string;
-  contentType: "TEXT" | "URL";
-  content?: string;
-  language?: string | null;
-  url?: string;
-  tags: string[];
-  collectionIds: string[];
-  isFavorite: boolean;
-  isPinned: boolean;
-  createdAt: string;
-}
-
 export interface DashboardStats {
   totalItems: number;
   totalCollections: number;
