@@ -17,4 +17,4 @@ Do not add the items underneath yet. We will do that later.
 
 ## References
 
-Check the `@context/screenshots/dashboard-ui-main.png` screenshot if needed, but layout and design is already there.
+Check the `@context/Dashboard-UI.png` screenshot if needed, but layout and design is already there.
