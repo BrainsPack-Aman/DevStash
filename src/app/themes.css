@@ -1,0 +1,362 @@
+/*
+ * Named themes. The default theme lives in globals.css. Register each theme in
+ * src/lib/theme.ts.
+ *
+ * Every theme has two blocks: `:root[data-theme="x"]` for light and
+ * `:root[data-theme="x"].dark` for dark. Both outrank `:root` and `.dark`.
+ * The dark block inherits from the light one, so it sets every color again.
+ */
+
+/* Tokens every named theme derives from its own core colors. */
+:root[data-theme] {
+    color-scheme: light;
+    --card-foreground: var(--foreground);
+    --popover-foreground: var(--foreground);
+    --secondary: var(--muted);
+    --secondary-foreground: var(--foreground);
+    --accent-foreground: var(--foreground);
+    --chart-1: var(--primary);
+    --chart-2: var(--stat-blue);
+    --chart-3: var(--stat-violet);
+    --chart-4: var(--stat-yellow);
+    --chart-5: var(--stat-emerald);
+    --sidebar: var(--card);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+    --stat-blue-surface: color-mix(in oklab, var(--stat-blue) 12%, transparent);
+    --stat-violet-surface: color-mix(in oklab, var(--stat-violet) 12%, transparent);
+    --stat-yellow-surface: color-mix(in oklab, var(--stat-yellow) 12%, transparent);
+    --stat-emerald-surface: color-mix(in oklab, var(--stat-emerald) 12%, transparent);
+}
+
+:root[data-theme].dark {
+    color-scheme: dark;
+    --item-l-max: 1;
+}
+
+:root[data-theme="vercel"] {
+    --background: #ffffff;
+    --foreground: #171717;
+    --card: #fafafa;
+    --popover: #ffffff;
+    --primary: #000000;
+    --primary-foreground: #ffffff;
+    --muted: #f2f2f2;
+    --muted-foreground: #5c5c5c;
+    --accent: #ebebeb;
+    --destructive: #c50f1f;
+    --border: #eaeaea;
+    --input: #d4d4d4;
+    --ring: #737373;
+    --favorite: #a35200;
+    --stat-blue: #0060df;
+    --stat-violet: #7820bc;
+    --stat-yellow: #8f5200;
+    --stat-emerald: #107d32;
+    --overlay: rgb(0 0 0 / 25%);
+    --item-l-max: 0.49;
+}
+
+:root[data-theme="vercel"].dark {
+    --background: #000000;
+    --foreground: #ededed;
+    --card: #0a0a0a;
+    --popover: #111111;
+    --primary: #ffffff;
+    --primary-foreground: #000000;
+    --muted: #1a1a1a;
+    --muted-foreground: #a1a1a1;
+    --accent: #1f1f1f;
+    --destructive: #ff6166;
+    --border: #2e2e2e;
+    --input: #3a3a3a;
+    --ring: #8f8f8f;
+    --favorite: #f5a623;
+    --stat-blue: #52a8ff;
+    --stat-violet: #bf7af0;
+    --stat-yellow: #f5a623;
+    --stat-emerald: #62c073;
+    --overlay: rgb(0 0 0 / 60%);
+    --item-l-min: 0.72;
+}
+
+:root[data-theme="claude"] {
+    --background: #faf9f5;
+    --foreground: #3d3929;
+    --card: #f4f2ea;
+    --popover: #fffdf8;
+    --primary: #a9502f;
+    --primary-foreground: #ffffff;
+    --muted: #edeade;
+    --muted-foreground: #625e4f;
+    --accent: #f1e6da;
+    --destructive: #b3261e;
+    --border: #e3dfd1;
+    --input: #d6d1c0;
+    --ring: #c96442;
+    --favorite: #b7791f;
+    --stat-blue: #2b62a8;
+    --stat-violet: #6d4bb0;
+    --stat-yellow: #95600f;
+    --stat-emerald: #26734d;
+    --overlay: rgb(61 57 41 / 25%);
+    --item-l-max: 0.48;
+}
+
+:root[data-theme="claude"].dark {
+    --background: #262624;
+    --foreground: #ece9df;
+    --card: #2f2f2c;
+    --popover: #353532;
+    --primary: #e08a68;
+    --primary-foreground: #1f1e1d;
+    --muted: #3a3a36;
+    --muted-foreground: #bfbbad;
+    --accent: #454139;
+    --destructive: #ff8a80;
+    --border: #43433e;
+    --input: #57564f;
+    --ring: #d97757;
+    --favorite: #e5b567;
+    --stat-blue: #8ab4f8;
+    --stat-violet: #b9a0e8;
+    --stat-yellow: #e5b567;
+    --stat-emerald: #7fc29b;
+    --overlay: rgb(0 0 0 / 55%);
+    --item-l-min: 0.78;
+}
+
+:root[data-theme="dracula"] {
+    --background: #fffbeb;
+    --foreground: #1f1f1f;
+    --card: #f6f2e2;
+    --popover: #fffdf4;
+    --primary: #644ac9;
+    --primary-foreground: #ffffff;
+    --muted: #eeead9;
+    --muted-foreground: #56555f;
+    --accent: #e6e0f5;
+    --destructive: #b02617;
+    --border: #dedac8;
+    --input: #cfcab6;
+    --ring: #a3144d;
+    --favorite: #846e15;
+    --stat-blue: #036a96;
+    --stat-violet: #644ac9;
+    --stat-yellow: #7a6510;
+    --stat-emerald: #14710a;
+    --overlay: rgb(31 31 31 / 25%);
+    --item-l-max: 0.48;
+}
+
+:root[data-theme="dracula"].dark {
+    --background: #282a36;
+    --foreground: #f8f8f2;
+    --card: #2f3140;
+    --popover: #343746;
+    --primary: #bd93f9;
+    --primary-foreground: #21222c;
+    --muted: #3a3d4e;
+    --muted-foreground: #b6b9ce;
+    --accent: #44475a;
+    --destructive: #ff7b7b;
+    --border: #44475a;
+    --input: #565a73;
+    --ring: #ff79c6;
+    --favorite: #f1fa8c;
+    --stat-blue: #8be9fd;
+    --stat-violet: #bd93f9;
+    --stat-yellow: #f1fa8c;
+    --stat-emerald: #50fa7b;
+    --overlay: rgb(20 21 28 / 60%);
+    --item-l-min: 0.79;
+}
+
+:root[data-theme="nord"] {
+    --background: #eceff4;
+    --foreground: #2e3440;
+    --card: #e5e9f0;
+    --popover: #f6f8fb;
+    --primary: #3b6390;
+    --primary-foreground: #ffffff;
+    --muted: #dde2ea;
+    --muted-foreground: #434c5e;
+    --accent: #d8dee9;
+    --destructive: #9b2c39;
+    --border: #d0d7e3;
+    --input: #c0c8d8;
+    --ring: #4c6f9a;
+    --favorite: #85600f;
+    --stat-blue: #35597f;
+    --stat-violet: #7d4a74;
+    --stat-yellow: #755610;
+    --stat-emerald: #46632f;
+    --overlay: rgb(46 52 64 / 25%);
+    --item-l-max: 0.44;
+}
+
+:root[data-theme="nord"].dark {
+    --background: #2e3440;
+    --foreground: #eceff4;
+    --card: #353c4a;
+    --popover: #3b4252;
+    --primary: #88c0d0;
+    --primary-foreground: #242933;
+    --muted: #3f4758;
+    --muted-foreground: #c0c8d8;
+    --accent: #434c5e;
+    --destructive: #f0a0a8;
+    --border: #434c5e;
+    --input: #566178;
+    --ring: #88c0d0;
+    --favorite: #ebcb8b;
+    --stat-blue: #88c0d0;
+    --stat-violet: #c9a9c4;
+    --stat-yellow: #ebcb8b;
+    --stat-emerald: #a3be8c;
+    --overlay: rgb(25 29 37 / 55%);
+    --item-l-min: 0.84;
+}
+
+:root[data-theme="monokai"] {
+    --background: #fbf9f4;
+    --foreground: #29242a;
+    --card: #f3f0e8;
+    --popover: #fffdf9;
+    --primary: #467000;
+    --primary-foreground: #ffffff;
+    --muted: #ebe7dd;
+    --muted-foreground: #565059;
+    --accent: #e6e1d3;
+    --destructive: #b51250;
+    --border: #ddd8cb;
+    --input: #cdc7b8;
+    --ring: #d6195e;
+    --favorite: #866a00;
+    --stat-blue: #0b6a8a;
+    --stat-violet: #6a47b8;
+    --stat-yellow: #775e00;
+    --stat-emerald: #3f6b00;
+    --overlay: rgb(41 36 42 / 25%);
+    --item-l-max: 0.47;
+}
+
+:root[data-theme="monokai"].dark {
+    --background: #272822;
+    --foreground: #f8f8f2;
+    --card: #2e2f28;
+    --popover: #34352d;
+    --primary: #a6e22e;
+    --primary-foreground: #1e1f1a;
+    --muted: #3b3c33;
+    --muted-foreground: #bcb9a3;
+    --accent: #49483e;
+    --destructive: #ff7a9c;
+    --border: #45463b;
+    --input: #5a5b4d;
+    --ring: #f92672;
+    --favorite: #e6db74;
+    --stat-blue: #66d9ef;
+    --stat-violet: #ae81ff;
+    --stat-yellow: #e6db74;
+    --stat-emerald: #a6e22e;
+    --overlay: rgb(18 19 15 / 60%);
+    --item-l-min: 0.76;
+}
+
+:root[data-theme="github"] {
+    --background: #ffffff;
+    --foreground: #1f2328;
+    --card: #f6f8fa;
+    --popover: #ffffff;
+    --primary: #1a7f37;
+    --primary-foreground: #ffffff;
+    --muted: #eaeef2;
+    --muted-foreground: #535c66;
+    --accent: #e7ecf1;
+    --destructive: #c21c27;
+    --border: #d1d9e0;
+    --input: #c4ccd5;
+    --ring: #0969da;
+    --favorite: #9a6700;
+    --stat-blue: #0969da;
+    --stat-violet: #8250df;
+    --stat-yellow: #8a5d00;
+    --stat-emerald: #1a7f37;
+    --overlay: rgb(31 35 40 / 25%);
+    --item-l-max: 0.49;
+}
+
+:root[data-theme="github"].dark {
+    --background: #0d1117;
+    --foreground: #e6edf3;
+    --card: #151b23;
+    --popover: #1b222c;
+    --primary: #238636;
+    --primary-foreground: #ffffff;
+    --muted: #212830;
+    --muted-foreground: #a3adb9;
+    --accent: #262c36;
+    --destructive: #ff7b72;
+    --border: #30363d;
+    --input: #3d444d;
+    --ring: #4493f8;
+    --favorite: #e3b341;
+    --stat-blue: #58a6ff;
+    --stat-violet: #bc8cff;
+    --stat-yellow: #e3b341;
+    --stat-emerald: #3fb950;
+    --overlay: rgb(1 4 9 / 60%);
+    --item-l-min: 0.72;
+}
+
+:root[data-theme="midnight"] {
+    --background: #f5f8ff;
+    --foreground: #101a33;
+    --card: #ebf0fc;
+    --popover: #ffffff;
+    --primary: #1e40af;
+    --primary-foreground: #ffffff;
+    --muted: #e0e7f8;
+    --muted-foreground: #43506f;
+    --accent: #dae3fa;
+    --destructive: #b01a2a;
+    --border: #d3dcf2;
+    --input: #bfcbea;
+    --ring: #3b5bdb;
+    --favorite: #8f5a08;
+    --stat-blue: #1d4ed8;
+    --stat-violet: #6d28d9;
+    --stat-yellow: #845300;
+    --stat-emerald: #046c4e;
+    --overlay: rgb(16 26 51 / 25%);
+    --item-l-max: 0.47;
+}
+
+:root[data-theme="midnight"].dark {
+    --background: #0a1020;
+    --foreground: #e2e8f0;
+    --card: #111a30;
+    --popover: #152039;
+    --primary: #6ea8fe;
+    --primary-foreground: #0a1020;
+    --muted: #1b2744;
+    --muted-foreground: #9fadc6;
+    --accent: #203055;
+    --destructive: #ff7b86;
+    --border: #243255;
+    --input: #304270;
+    --ring: #6ea8fe;
+    --favorite: #fbbf24;
+    --stat-blue: #6ea8fe;
+    --stat-violet: #a78bfa;
+    --stat-yellow: #fbbf24;
+    --stat-emerald: #34d399;
+    --overlay: rgb(3 6 15 / 60%);
+    --item-l-min: 0.72;
+}

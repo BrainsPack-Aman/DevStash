@@ -10,10 +10,10 @@ interface StatDefinition {
 }
 
 const STATS: StatDefinition[] = [
-  { key: "totalItems", label: "Items", icon: LayoutGrid, iconClassName: "bg-blue-500/10 text-blue-400" },
-  { key: "totalCollections", label: "Collections", icon: Folder, iconClassName: "bg-violet-500/10 text-violet-400" },
-  { key: "favoriteItems", label: "Favorite items", icon: Star, iconClassName: "bg-yellow-500/10 text-yellow-400" },
-  { key: "favoriteCollections", label: "Favorite collections", icon: FolderHeart, iconClassName: "bg-emerald-500/10 text-emerald-400" },
+  { key: "totalItems", label: "Items", icon: LayoutGrid, iconClassName: "bg-stat-blue-surface text-stat-blue" },
+  { key: "totalCollections", label: "Collections", icon: Folder, iconClassName: "bg-stat-violet-surface text-stat-violet" },
+  { key: "favoriteItems", label: "Favorite items", icon: Star, iconClassName: "bg-stat-yellow-surface text-stat-yellow" },
+  { key: "favoriteCollections", label: "Favorite collections", icon: FolderHeart, iconClassName: "bg-stat-emerald-surface text-stat-emerald" },
 ];
 
 export default function StatsCards({ stats }: { stats: DashboardStats }) {

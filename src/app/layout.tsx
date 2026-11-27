@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -16,9 +17,6 @@ export const metadata: Metadata = {
   title: "DevStash",
   description: "One fast, searchable, AI-enhanced hub for all your dev knowledge and resources.",
 };
-
-// Dark is the default; only an explicit "light" choice in localStorage switches it off.
-const THEME_INIT_SCRIPT = `try{if(localStorage.getItem("theme")==="light"){document.documentElement.classList.remove("dark")}}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

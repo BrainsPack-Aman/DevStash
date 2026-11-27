@@ -3,6 +3,7 @@ import { Star } from "lucide-react";
 
 import ItemTypeIcon from "@/components/dashboard/ItemTypeIcon";
 import { formatShortDate } from "@/lib/format";
+import { itemColorVar } from "@/lib/item-type-colors";
 import type { DashboardCollection } from "@/types/dashboard";
 
 interface CollectionCardProps {
@@ -24,13 +25,13 @@ export default function CollectionCard({ collection, index = 0 }: CollectionCard
     >
       <div className="flex items-start justify-between">
         <div
-          className="flex size-9 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-110 motion-reduce:transition-none"
-          style={{ backgroundColor: type ? `${type.color}1f` : undefined, color: type?.color }}
+          className={`flex size-9 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-110 motion-reduce:transition-none ${type ? "text-item" : ""}`}
+          style={type ? { ...itemColorVar(type.color), backgroundColor: `${type.color}1f` } : undefined}
         >
           <ItemTypeIcon iconName={type?.icon} className="size-4" />
         </div>
         {collection.isFavorite && (
-          <Star className="size-4 fill-yellow-400 text-yellow-400" aria-label="Favorite" />
+          <Star className="size-4 fill-favorite text-favorite" aria-label="Favorite" />
         )}
       </div>
       <div className="min-w-0">
@@ -43,7 +44,7 @@ export default function CollectionCard({ collection, index = 0 }: CollectionCard
         </span>
         <div className="flex items-center gap-1.5">
           {collection.types.map((t) => (
-            <span key={t.id} title={t.name} style={{ color: t.color }}>
+            <span key={t.id} title={t.name} className="text-item" style={itemColorVar(t.color)}>
               <ItemTypeIcon iconName={t.icon} className="size-3.5" />
             </span>
           ))}
