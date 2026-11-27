@@ -1,35 +1,20 @@
-# Current Feature: Sidebar Pro Badge
+# Current Feature
 
 <!-- feature name and short description -->
-
-Add a PRO badge to the Files and Images item types in the sidebar, to show that they are Pro features.
 
 ## Status
 
 <!-- Not started | In Progress | Completed -->
 
-In Progress
+Not Started
 
 ## Goals
 
 <!-- Goals and Requirements -->
 
-- The Files and Images item types in the sidebar show a PRO badge
-- No other item type shows the badge
-- Use the shadcn/ui Badge component, with a subtle style that fits the dark sidebar
-- The badge text is uppercase ("PRO")
-- Icons, names, counts and links in the sidebar keep working as before, in both the desktop sidebar and the mobile drawer
-
 ## Notes
 
 <!-- Any extra notes -->
-
-- Sidebar: `src/components/dashboard/Sidebar.tsx` (the "Types" section).
-- The Badge component is not installed yet. Only button, input, popover and sheet exist in `src/components/ui/`, so add it with the shadcn CLI.
-- Files and images are the Pro system types (`context/project-overview.md`).
-- Display only: no gating. During development all users can access everything.
-- The collapsed sidebar shows icons only, so the badge appears when the type names are visible.
-- Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/` (Next.js 16 has breaking changes).
 
 ## History
 
@@ -45,3 +30,4 @@ In Progress
 - **Dashboard collections:** Replaced the mock collection data in the dashboard main area with real data from Neon via Prisma. Added `src/lib/db/collections.ts` (recent collections and collection stats), fetched in server components inside Suspense. Collection cards show a left accent border in the color of the most-used item type, small icons for every type in the collection, and an updated item count. Added staggered entrance and hover animations to the collection, item and stats cards and the dashboard sections, all respecting reduced motion. Items, pinned items and the sidebar still read from the mock data.
 - **Dashboard items:** Replaced the mock pinned and recent items in the dashboard main area with real data from Neon via Prisma. Added `src/lib/db/items.ts` (pinned items, 10 most recent items and item stats), fetched in async server components inside Suspense with skeleton fallbacks. Item cards take their icon, type tag and a left accent border from the item type, and the pinned section renders nothing when there are no pinned items. All four stats cards now come from the database, and the unused `src/lib/dashboard-data.ts` was removed. The sidebar still reads from the mock data.
 - **Stats and sidebar:** The sidebar now reads from the database. Added `getSystemItemTypes` (`src/lib/db/items.ts`, the 7 system item types with the demo user's item counts, each linking to `/items/[slug]`) and `getAllCollections` (`src/lib/db/collections.ts`, sharing the loader with `getRecentCollections`). The dashboard layout fetches both and passes them through the shell to the sidebar. Favorite collections keep the star, and recent collections show a folder outlined in the color of their most-used item type. Added "View all collections" under the lists, and in the collapsed sidebar each popover ends with its own link ("View all favorites" or "View all collections"). The main-area stats were already database-backed. The sidebar user block and the welcome name still use the mock user.
+- **Sidebar Pro badge:** The Files and Images types in the sidebar now show a subtle "PRO" badge (shadcn/ui `Badge`, added in `src/components/ui/badge.tsx`), in the desktop sidebar and the mobile drawer; the collapsed sidebar shows icons only. It is display only, with no gating. The sidebar's scrollbar is now hidden (`no-scrollbar`) and the list still scrolls.
