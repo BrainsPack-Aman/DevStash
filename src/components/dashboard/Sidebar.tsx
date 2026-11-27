@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import Link from "next/link";
 import { ChevronDown, Folder, PanelLeft, Star, type LucideIcon } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 import { ITEM_TYPE_ICONS } from "@/lib/item-type-icons";
@@ -39,6 +40,7 @@ interface CollectionSection {
 const SIDEBAR_LIST_LIMIT = 5;
 const ALL_COLLECTIONS_HREF = "/collections";
 const FAVORITE_COLLECTIONS_HREF = "/collections?filter=favorites";
+const PRO_TYPE_SLUGS = new Set(["files", "images"]);
 
 // `collections` arrives most recently updated first.
 function buildCollectionSections(collections: Collection[]): CollectionSection[] {
@@ -226,7 +228,7 @@ export default function Sidebar({
         </div>
       )}
 
-      <nav className="flex-1 space-y-6 overflow-y-auto p-2">
+      <nav className="no-scrollbar flex-1 space-y-6 overflow-y-auto p-2">
         <section>
           <SectionLabel collapsed={collapsed}>Types</SectionLabel>
           <ul className="space-y-0.5">
@@ -243,7 +245,17 @@ export default function Sidebar({
                     {Icon && <Icon className="size-4 shrink-0" style={{ color: type.color }} />}
                     {!collapsed && (
                       <>
-                        <span className="flex-1">{type.name}s</span>
+                        <span className="flex flex-1 items-center gap-2">
+                          {type.name}s
+                          {PRO_TYPE_SLUGS.has(type.slug) && (
+                            <Badge
+                              variant="outline"
+                              className="h-4 px-1.5 text-[10px] tracking-wider text-muted-foreground"
+                            >
+                              PRO
+                            </Badge>
+                          )}
+                        </span>
                         <span className="text-xs">{type.count}</span>
                       </>
                     )}
