@@ -12,11 +12,10 @@ import {
 } from "@/lib/sidebar-cookie";
 
 async function ShellWithPreferences({ children }: { children: React.ReactNode }) {
-  const [cookieStore, itemTypes, collections] = await Promise.all([
-    cookies(),
-    getSystemItemTypes(),
-    getAllCollections(),
-  ]);
+  // Read the request cookies first: that opts this layout out of prerendering
+  // before any database query starts.
+  const cookieStore = await cookies();
+  const [itemTypes, collections] = await Promise.all([getSystemItemTypes(), getAllCollections()]);
   const initialCollapsed = cookieStore.get(SIDEBAR_COLLAPSED_COOKIE)?.value === "true";
   const initialSectionsOpen = Object.fromEntries(
     SIDEBAR_SECTION_KEYS.map((key) => [key, cookieStore.get(sidebarSectionCookie(key))?.value !== "false"]),

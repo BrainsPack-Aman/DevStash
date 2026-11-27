@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { connection } from "next/server";
 
 import CollectionCard from "@/components/dashboard/CollectionCard";
 import DashboardSection from "@/components/dashboard/DashboardSection";
@@ -9,11 +10,13 @@ import { getItemStats, getPinnedItems, getRecentItems } from "@/lib/db/items";
 import { currentUser } from "@/lib/mock-data";
 
 async function DashboardStatsCards() {
+  await connection();
   const [itemStats, collectionStats] = await Promise.all([getItemStats(), getCollectionStats()]);
   return <StatsCards stats={{ ...itemStats, ...collectionStats }} />;
 }
 
 async function RecentCollections() {
+  await connection();
   const recentCollections = await getRecentCollections();
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -25,6 +28,7 @@ async function RecentCollections() {
 }
 
 async function PinnedItems() {
+  await connection();
   const pinnedItems = await getPinnedItems();
   if (pinnedItems.length === 0) return null;
 
@@ -40,6 +44,7 @@ async function PinnedItems() {
 }
 
 async function RecentItems() {
+  await connection();
   const recentItems = await getRecentItems();
   return (
     <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
