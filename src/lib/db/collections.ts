@@ -6,9 +6,7 @@ export const RECENT_COLLECTIONS_LIMIT = 6;
 // No auth yet: the dashboard shows the seeded demo user's data.
 const DEMO_USER_EMAIL = "demo@devstash.io";
 
-export async function getRecentCollections(
-  limit = RECENT_COLLECTIONS_LIMIT,
-): Promise<DashboardCollection[]> {
+async function findCollections(limit?: number): Promise<DashboardCollection[]> {
   const collections = await prisma.collection.findMany({
     where: { user: { email: DEMO_USER_EMAIL } },
     orderBy: { updatedAt: "desc" },
@@ -56,6 +54,17 @@ export async function getRecentCollections(
       types,
     };
   });
+}
+
+export function getRecentCollections(
+  limit = RECENT_COLLECTIONS_LIMIT,
+): Promise<DashboardCollection[]> {
+  return findCollections(limit);
+}
+
+// Every collection, most recently updated first (the sidebar splits favorites from the rest).
+export function getAllCollections(): Promise<DashboardCollection[]> {
+  return findCollections();
 }
 
 export async function getCollectionStats(): Promise<{

@@ -2,7 +2,7 @@
 
 <!-- feature name and short description -->
 
-Dashboard items: replace the dummy item data in the dashboard main area (right side) with real data from the Neon database via Prisma, for both pinned items and recent items. Spec: `context/dashboard-items-spec.md`.
+Stats and sidebar: show the system item types and the real collections from the database in the sidebar, and make sure the main-area stats come from the database instead of `src/lib/mock-data.ts`. Spec: `context/stats-sidebar-spec.md`.
 
 ## Status
 
@@ -14,25 +14,23 @@ Completed
 
 <!-- Goals and Requirements -->
 
-- Replace the mock item data shown in the dashboard main area (pinned items and recent items) with data from the Neon database using Prisma, instead of `src/lib/mock-data.ts`
-- Create `src/lib/db/items.ts` with the data fetching functions
-- Fetch items directly in the server component
-- Item card icon and border are derived from the item type
-- Keep showing the item type tag and everything else currently on the card (title, description, preview, tags, pinned and favorite markers, date). Reference screenshot: `context/screenshots/dashboard-ui-main.png`
-- If there are no pinned items, show nothing in that section (no heading, no empty state)
-- Update the stats display so the item counts (total items, favorite items) come from the database
-- Keep the current design and layout
+- Main-area stats (items, collections, favorite items, favorite collections) come from the database, keeping the current design and layout
+- Sidebar item types: show the system item types with their icons, each linking to `/items/[typename]` (the type slug, e.g. `/items/snippets`)
+- Sidebar collections come from the database instead of the mock data
+- Add a "View all collections" link under the collections list that goes to `/collections`
+- Favorite collections keep the star icon. Recent collections show a colored circle based on the most-used item type in that collection
+- Put the database functions in `src/lib/db/items.ts` (use `src/lib/db/collections.ts` as the reference)
 
 ## Notes
 
 <!-- Any extra notes -->
 
-- Spec: `context/dashboard-items-spec.md`. Other references: `context/project-overview.md` (data models), `prisma/schema.prisma`, `src/lib/prisma.ts` (runtime client) and `src/lib/db/collections.ts` (the pattern to follow).
-- The spec's last requirement says "Update collection stats display", which looks like a copy of the previous spec. Collection stats already come from the database, so this is read as updating the item stats (Items and Favorite items cards).
-- Follow the collections work: fetch in async server components wrapped in Suspense (Cache Components is on), and use the seeded demo user (`demo@devstash.io`) until auth exists.
-- The item card currently has no type-colored border. Add one matching the collection card's left accent (type color on the left edge) so the card, icon and border all follow the item type.
-- Item tags (`ItemTag`) and the item's collections come from relations; select only what the card needs.
-- The sidebar (item type counts, collections) still reads from the mock data and is a separate step.
+- Spec: `context/stats-sidebar-spec.md`. References: `src/lib/db/collections.ts`, `src/lib/db/items.ts`, `prisma/schema.prisma`.
+- The main-area stats already read from the database (`getItemStats` in `src/lib/db/items.ts` and `getCollectionStats` in `src/lib/db/collections.ts`), and `src/lib/db/items.ts` already exists. Check what is still missing against the spec (for example the sidebar functions) rather than rebuilding them.
+- The sidebar (`src/components/dashboard/Sidebar.tsx`) still reads `collections`, `itemTypes` and `currentUser` from `src/lib/mock-data.ts`. The sidebar item type counts should also come from the database.
+- The sidebar lives in the dashboard layout, which already wraps its cookie reads in Suspense (Cache Components is on). Fetch in a server component and pass the data down as props, since the sidebar is a client component.
+- Use the seeded demo user (`demo@devstash.io`) until auth exists. The user block at the bottom of the sidebar can stay on the mock user unless it is cheap to read from the database.
+- Reuse the collection's primary type logic from `getRecentCollections` for the colored circle, and the item type icon mapping in `src/lib/item-type-icons.ts`.
 - Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/` (Next.js 16 has breaking changes).
 
 ## History
@@ -48,3 +46,4 @@ Completed
 - **Seed data:** Extended `prisma/seed.ts` to populate the database with sample data for development and demos: a demo user (`demo@devstash.io`, password hashed with bcryptjs at 12 rounds), the 7 system item types, and 5 collections (React Patterns, AI Workflows, DevOps, Terminal Commands, Design Resources) holding 18 snippets, prompts, commands and links. The seed is idempotent and safe to re-run, and is for development and demos only, never production.
 - **Dashboard collections:** Replaced the mock collection data in the dashboard main area with real data from Neon via Prisma. Added `src/lib/db/collections.ts` (recent collections and collection stats), fetched in server components inside Suspense. Collection cards show a left accent border in the color of the most-used item type, small icons for every type in the collection, and an updated item count. Added staggered entrance and hover animations to the collection, item and stats cards and the dashboard sections, all respecting reduced motion. Items, pinned items and the sidebar still read from the mock data.
 - **Dashboard items:** Replaced the mock pinned and recent items in the dashboard main area with real data from Neon via Prisma. Added `src/lib/db/items.ts` (pinned items, 10 most recent items and item stats), fetched in async server components inside Suspense with skeleton fallbacks. Item cards take their icon, type tag and a left accent border from the item type, and the pinned section renders nothing when there are no pinned items. All four stats cards now come from the database, and the unused `src/lib/dashboard-data.ts` was removed. The sidebar still reads from the mock data.
+- **Stats and sidebar:** The sidebar now reads from the database. Added `getSystemItemTypes` (`src/lib/db/items.ts`, the 7 system item types with the demo user's item counts, each linking to `/items/[slug]`) and `getAllCollections` (`src/lib/db/collections.ts`, sharing the loader with `getRecentCollections`). The dashboard layout fetches both and passes them through the shell to the sidebar. Favorite collections keep the star, and recent collections show a folder outlined in the color of their most-used item type. Added "View all collections" under the lists, and in the collapsed sidebar each popover ends with its own link ("View all favorites" or "View all collections"). The main-area stats were already database-backed. The sidebar user block and the welcome name still use the mock user.

@@ -7,14 +7,17 @@ import { ChevronDown, Folder, PanelLeft, Star, type LucideIcon } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 import { ITEM_TYPE_ICONS } from "@/lib/item-type-icons";
-import { collections, currentUser, itemTypes } from "@/lib/mock-data";
+import { currentUser } from "@/lib/mock-data";
 import type { SidebarSectionKey, SidebarSectionsOpen } from "@/lib/sidebar-cookie";
+import type { DashboardCollection, ItemType } from "@/types/dashboard";
 
-type Collection = (typeof collections)[number];
+type Collection = DashboardCollection;
 
 interface SidebarProps {
   sectionsOpen: SidebarSectionsOpen;
   onToggleSection: (key: SidebarSectionKey) => void;
+  itemTypes: ItemType[];
+  collections: Collection[];
   collapsed?: boolean;
   onToggleCollapsed?: () => void;
   onNavigate?: () => void;
@@ -27,33 +30,43 @@ interface CollectionSection {
   iconClassName: string;
   showCount: boolean;
   viewAllHref: string;
+  viewAllLabel: string;
+  // recent collections draw their folder outline in their main type color
+  showTypeColor: boolean;
   collections: Collection[];
 }
 
-const SIDEBAR_LIST_LIMIT = 3;
+const SIDEBAR_LIST_LIMIT = 5;
+const ALL_COLLECTIONS_HREF = "/collections";
+const FAVORITE_COLLECTIONS_HREF = "/collections?filter=favorites";
 
-const COLLECTION_SECTIONS: CollectionSection[] = [
-  {
-    key: "favorites",
-    title: "Favorites",
-    icon: Star,
-    iconClassName: "fill-yellow-400 text-yellow-400",
-    showCount: false,
-    viewAllHref: "/collections?filter=favorites",
-    collections: collections.filter((c) => c.isFavorite),
-  },
-  {
-    key: "recent",
-    title: "Recent collections",
-    icon: Folder,
-    iconClassName: "",
-    showCount: true,
-    viewAllHref: "/collections",
-    collections: collections
-      .filter((c) => !c.isFavorite)
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
-  },
-];
+// `collections` arrives most recently updated first.
+function buildCollectionSections(collections: Collection[]): CollectionSection[] {
+  return [
+    {
+      key: "favorites",
+      title: "Favorites",
+      icon: Star,
+      iconClassName: "fill-yellow-400 text-yellow-400",
+      showCount: false,
+      viewAllHref: FAVORITE_COLLECTIONS_HREF,
+      viewAllLabel: "View all favorites",
+      showTypeColor: false,
+      collections: collections.filter((c) => c.isFavorite),
+    },
+    {
+      key: "recent",
+      title: "Recent collections",
+      icon: Folder,
+      iconClassName: "",
+      showCount: true,
+      viewAllHref: ALL_COLLECTIONS_HREF,
+      viewAllLabel: "View all collections",
+      showTypeColor: true,
+      collections: collections.filter((c) => !c.isFavorite),
+    },
+  ];
+}
 
 const initials = currentUser.name
   .split(" ")
@@ -87,7 +100,14 @@ function CollectionList({ section, collections: list, onNavigate }: CollectionLi
       {list.map((collection) => (
         <li key={collection.id}>
           <Link href={`/collections/${collection.id}`} onClick={onNavigate} className={LINK_CLASS}>
-            <Icon className={`size-4 shrink-0 ${section.iconClassName}`} />
+            <Icon
+              className={`size-4 shrink-0 ${section.iconClassName}`}
+              style={
+                section.showTypeColor && collection.primaryType
+                  ? { color: collection.primaryType.color }
+                  : undefined
+              }
+            />
             <span className="flex-1 truncate">{collection.name}</span>
             {section.showCount && <span className="text-xs">{collection.itemCount}</span>}
           </Link>
@@ -127,6 +147,13 @@ function CollapsedSectionButton({ section }: { section: CollectionSection }) {
             onNavigate={() => setOpen(false)}
           />
         </div>
+        <Link
+          href={section.viewAllHref}
+          onClick={() => setOpen(false)}
+          className="px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+        >
+          {section.viewAllLabel}
+        </Link>
       </PopoverContent>
     </Popover>
   );
@@ -140,7 +167,6 @@ interface ExpandedSectionProps {
 }
 
 function ExpandedSection({ section, open, onToggle, onNavigate }: ExpandedSectionProps) {
-  const total = section.collections.length;
   const listId = useId();
 
   return (
@@ -166,15 +192,6 @@ function ExpandedSection({ section, open, onToggle, onNavigate }: ExpandedSectio
             collections={section.collections.slice(0, SIDEBAR_LIST_LIMIT)}
             onNavigate={onNavigate}
           />
-          {total > SIDEBAR_LIST_LIMIT && (
-            <Link
-              href={section.viewAllHref}
-              onClick={onNavigate}
-              className="mt-1 block px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
-            >
-              View all ({total})
-            </Link>
-          )}
         </div>
       )}
     </>
@@ -184,11 +201,14 @@ function ExpandedSection({ section, open, onToggle, onNavigate }: ExpandedSectio
 export default function Sidebar({
   sectionsOpen,
   onToggleSection,
+  itemTypes,
+  collections,
   collapsed = false,
   onToggleCollapsed,
   onNavigate,
 }: SidebarProps) {
   const linkClass = `${LINK_CLASS} ${collapsed ? "justify-center" : ""}`;
+  const collectionSections = buildCollectionSections(collections);
 
   return (
     <div className="flex h-full flex-col">
@@ -234,7 +254,7 @@ export default function Sidebar({
           </ul>
         </section>
 
-        {COLLECTION_SECTIONS.map((section) => (
+        {collectionSections.map((section) => (
           <section key={section.title}>
             {collapsed ? (
               <>
@@ -251,6 +271,16 @@ export default function Sidebar({
             )}
           </section>
         ))}
+
+        {!collapsed && (
+          <Link
+            href={ALL_COLLECTIONS_HREF}
+            onClick={onNavigate}
+            className="block px-2 text-xs text-muted-foreground transition-colors hover:text-foreground"
+          >
+            View all collections
+          </Link>
+        )}
       </nav>
 
       <div className={`flex items-center gap-3 border-t p-3 ${collapsed ? "justify-center" : ""}`}>
