@@ -1,36 +1,34 @@
-# Current Feature
+# Current Feature: Sidebar Pro Badge
 
 <!-- feature name and short description -->
 
-Stats and sidebar: show the system item types and the real collections from the database in the sidebar, and make sure the main-area stats come from the database instead of `src/lib/mock-data.ts`. Spec: `context/stats-sidebar-spec.md`.
+Add a PRO badge to the Files and Images item types in the sidebar, to show that they are Pro features.
 
 ## Status
 
 <!-- Not started | In Progress | Completed -->
 
-Completed
+In Progress
 
 ## Goals
 
 <!-- Goals and Requirements -->
 
-- Main-area stats (items, collections, favorite items, favorite collections) come from the database, keeping the current design and layout
-- Sidebar item types: show the system item types with their icons, each linking to `/items/[typename]` (the type slug, e.g. `/items/snippets`)
-- Sidebar collections come from the database instead of the mock data
-- Add a "View all collections" link under the collections list that goes to `/collections`
-- Favorite collections keep the star icon. Recent collections show a colored circle based on the most-used item type in that collection
-- Put the database functions in `src/lib/db/items.ts` (use `src/lib/db/collections.ts` as the reference)
+- The Files and Images item types in the sidebar show a PRO badge
+- No other item type shows the badge
+- Use the shadcn/ui Badge component, with a subtle style that fits the dark sidebar
+- The badge text is uppercase ("PRO")
+- Icons, names, counts and links in the sidebar keep working as before, in both the desktop sidebar and the mobile drawer
 
 ## Notes
 
 <!-- Any extra notes -->
 
-- Spec: `context/stats-sidebar-spec.md`. References: `src/lib/db/collections.ts`, `src/lib/db/items.ts`, `prisma/schema.prisma`.
-- The main-area stats already read from the database (`getItemStats` in `src/lib/db/items.ts` and `getCollectionStats` in `src/lib/db/collections.ts`), and `src/lib/db/items.ts` already exists. Check what is still missing against the spec (for example the sidebar functions) rather than rebuilding them.
-- The sidebar (`src/components/dashboard/Sidebar.tsx`) still reads `collections`, `itemTypes` and `currentUser` from `src/lib/mock-data.ts`. The sidebar item type counts should also come from the database.
-- The sidebar lives in the dashboard layout, which already wraps its cookie reads in Suspense (Cache Components is on). Fetch in a server component and pass the data down as props, since the sidebar is a client component.
-- Use the seeded demo user (`demo@devstash.io`) until auth exists. The user block at the bottom of the sidebar can stay on the mock user unless it is cheap to read from the database.
-- Reuse the collection's primary type logic from `getRecentCollections` for the colored circle, and the item type icon mapping in `src/lib/item-type-icons.ts`.
+- Sidebar: `src/components/dashboard/Sidebar.tsx` (the "Types" section).
+- The Badge component is not installed yet. Only button, input, popover and sheet exist in `src/components/ui/`, so add it with the shadcn CLI.
+- Files and images are the Pro system types (`context/project-overview.md`).
+- Display only: no gating. During development all users can access everything.
+- The collapsed sidebar shows icons only, so the badge appears when the type names are visible.
 - Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/` (Next.js 16 has breaking changes).
 
 ## History
