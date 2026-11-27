@@ -11,17 +11,22 @@ import {
   type SidebarSectionKey,
   type SidebarSectionsOpen,
 } from "@/lib/sidebar-cookie";
+import type { DashboardCollection, ItemType } from "@/types/dashboard";
 
 interface DashboardShellProps {
   children: React.ReactNode;
   initialCollapsed: boolean;
   initialSectionsOpen: SidebarSectionsOpen;
+  itemTypes: ItemType[];
+  collections: DashboardCollection[];
 }
 
 export default function DashboardShell({
   children,
   initialCollapsed,
   initialSectionsOpen,
+  itemTypes,
+  collections,
 }: DashboardShellProps) {
   const [collapsed, setCollapsed] = useState(initialCollapsed);
   const [sectionsOpen, setSectionsOpen] = useState(initialSectionsOpen);
@@ -53,6 +58,8 @@ export default function DashboardShell({
             onToggleCollapsed={toggleCollapsed}
             sectionsOpen={sectionsOpen}
             onToggleSection={toggleSection}
+            itemTypes={itemTypes}
+            collections={collections}
           />
         </aside>
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
@@ -67,6 +74,8 @@ export default function DashboardShell({
           <Sidebar
             sectionsOpen={sectionsOpen}
             onToggleSection={toggleSection}
+            itemTypes={itemTypes}
+            collections={collections}
             onNavigate={() => setMobileOpen(false)}
           />
         </SheetContent>

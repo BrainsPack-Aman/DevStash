@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { DashboardItem } from "@/types/dashboard";
+import type { DashboardItem, ItemType } from "@/types/dashboard";
 
 export const RECENT_ITEMS_LIMIT = 10;
 
@@ -64,4 +64,31 @@ export async function getItemStats(): Promise<{ totalItems: number; favoriteItem
     prisma.item.count({ where: { ...userWhere, isFavorite: true } }),
   ]);
   return { totalItems, favoriteItems };
+}
+
+// Sidebar order; any other system type is listed after these.
+const SYSTEM_TYPE_ORDER = ["snippets", "prompts", "commands", "notes", "files", "images", "links"];
+
+export async function getSystemItemTypes(): Promise<ItemType[]> {
+  const types = await prisma.itemType.findMany({
+    where: { isSystem: true },
+    include: { _count: { select: { items: { where: userWhere } } } },
+  });
+
+  const rank = (slug: string) => {
+    const index = SYSTEM_TYPE_ORDER.indexOf(slug);
+    return index === -1 ? SYSTEM_TYPE_ORDER.length : index;
+  };
+
+  return types
+    .map((type) => ({
+      id: type.id,
+      name: type.name,
+      slug: type.slug,
+      icon: type.icon,
+      color: type.color,
+      isSystem: type.isSystem,
+      count: type._count.items,
+    }))
+    .sort((a, b) => rank(a.slug) - rank(b.slug));
 }
