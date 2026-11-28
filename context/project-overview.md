@@ -579,8 +579,9 @@ Freemium model.
 
 - Modern, minimal, developer-focused
 - Dark mode by default, light mode optional
-- Theme selector in the top bar: Default, Vercel, Claude, Dracula, Nord, Monokai, GitHub and Midnight, each with its own light and dark mode. The choice is saved in the browser
-- Colors come from CSS tokens (`src/app/globals.css` and `src/app/themes.css`), registered in `src/lib/theme.ts`
+- Theme selector in the top bar: Default, Vercel, Claude, Discord, Dracula, Nord, Monokai, GitHub and Midnight, each with its own light and dark mode. The choice is saved in the browser
+- Each theme sets its colors, fonts, corner radius and heading style through CSS tokens (`src/app/globals.css` and `src/app/themes.css`). Themes are registered in `src/lib/theme.ts`
+- Theme fonts are loaded with `next/font` in `src/app/fonts.ts`. Proprietary app fonts are replaced by free look-alikes, and GitHub uses the system fonts
 - Clean typography, generous whitespace
 - Subtle borders and shadows
 - Syntax highlighting for code blocks

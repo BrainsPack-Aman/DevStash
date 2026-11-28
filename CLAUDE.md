@@ -47,6 +47,7 @@ Unit tests use Vitest (`vitest.config.mts`, Node environment) and sit next to th
 - `src/app/` is the App Router root:
   - `layout.tsx` (root layout, runs the theme script before first paint) and `page.tsx` (home).
   - `globals.css` (Tailwind import, design tokens and the default theme) and `themes.css` (the named themes).
+  - `fonts.ts`: every font the themes use, loaded with `next/font`.
   - `dashboard/`: the `/dashboard` route. Its `layout.tsx` loads the sidebar data, and `page.tsx` renders the main area.
 - `src/components/dashboard/` holds the dashboard UI (shell, top bar, sidebar, cards, theme selector and light/dark toggle).
 - `src/components/ui/` holds the shadcn/ui components.
