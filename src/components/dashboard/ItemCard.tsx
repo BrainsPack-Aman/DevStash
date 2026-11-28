@@ -38,7 +38,7 @@ export default function ItemCard({ item, index = 0 }: { item: DashboardItem; ind
       </div>
 
       <div className="min-w-0">
-        <h3 className="truncate font-medium">{item.title}</h3>
+        <h3 className="truncate font-heading font-medium">{item.title}</h3>
         <p className="line-clamp-2 text-sm text-muted-foreground">{item.description}</p>
       </div>
 

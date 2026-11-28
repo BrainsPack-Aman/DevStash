@@ -49,7 +49,7 @@ export default function DashboardShell({
       <TopBar onOpenMobileSidebar={() => setMobileOpen(true)} />
       <div className="flex flex-1 overflow-hidden">
         <aside
-          className={`hidden shrink-0 border-r transition-[width] duration-200 md:block ${
+          className={`hidden shrink-0 border-r bg-sidebar-surface transition-[width] duration-200 md:block ${
             collapsed ? "w-14" : "w-64"
           }`}
         >
