@@ -19,7 +19,7 @@ async function RecentCollections() {
   await connection();
   const recentCollections = await getRecentCollections();
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
       {recentCollections.map((collection, index) => (
         <CollectionCard key={collection.id} collection={collection} index={index} />
       ))}
@@ -34,7 +34,7 @@ async function PinnedItems() {
 
   return (
     <DashboardSection title="Pinned items" description="Your go-to snippets, prompts and notes.">
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
         {pinnedItems.map((item, index) => (
           <ItemCard key={item.id} item={item} index={index} />
         ))}
@@ -47,7 +47,7 @@ async function RecentItems() {
   await connection();
   const recentItems = await getRecentItems();
   return (
-    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
       {recentItems.map((item, index) => (
         <ItemCard key={item.id} item={item} index={index} />
       ))}
@@ -71,7 +71,7 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-10">
       <header className="animate-in fade-in slide-in-from-bottom-1 duration-500 motion-reduce:animate-none">
-        <h1 className="text-3xl font-semibold tracking-tight">Welcome back, {firstName}</h1>
+        <h1 className="heading text-3xl">Welcome back, {firstName}</h1>
         <p className="text-muted-foreground">Everything you need, right where you left it.</p>
       </header>
 
@@ -85,7 +85,12 @@ export default function DashboardPage() {
         viewAllHref="/collections"
       >
         <Suspense
-          fallback={<CardsSkeleton count={6} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3" />}
+          fallback={
+            <CardsSkeleton
+              count={6}
+              className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3"
+            />
+          }
         >
           <RecentCollections />
         </Suspense>
@@ -97,7 +102,12 @@ export default function DashboardPage() {
 
       <DashboardSection title="Recent items" description="Pick up where you left off.">
         <Suspense
-          fallback={<CardsSkeleton count={6} className="grid gap-3 md:grid-cols-2 xl:grid-cols-3" />}
+          fallback={
+            <CardsSkeleton
+              count={6}
+              className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3"
+            />
+          }
         >
           <RecentItems />
         </Suspense>

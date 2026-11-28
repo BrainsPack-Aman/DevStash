@@ -8,6 +8,7 @@ export const THEMES = [
   { id: "default", name: "Default", startsDark: true },
   { id: "vercel", name: "Vercel", startsDark: true },
   { id: "claude", name: "Claude", startsDark: false },
+  { id: "discord", name: "Discord", startsDark: true },
   { id: "dracula", name: "Dracula", startsDark: true },
   { id: "nord", name: "Nord", startsDark: true },
   { id: "monokai", name: "Monokai", startsDark: true },

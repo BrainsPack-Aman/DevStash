@@ -1,20 +1,50 @@
-# Current Feature
+# Current Feature: Theme Typography and Discord Theme
 
-<!-- feature name and short description -->
+Switching themes changes the whole look (fonts and shape, not only colors) so each theme has the feel of its app, and Discord joins the theme list.
 
 ## Status
 
 <!-- Not started | In Progress | Completed -->
 
-Not Started
+In Progress
 
 ## Goals
 
 <!-- Goals and Requirements -->
 
+- Each theme sets its own typography (body, heading and monospace fonts) along with its colors, applied instantly on switch
+- Each theme also sets the style traits that give its app's vibe: corner radius, heading weight and letter spacing
+- Add a Discord theme to the theme menu, with light and dark modes, blurple accent, layered gray surfaces, a Discord-like font and rounded corners; it opens in dark mode
+- Proposed font per theme (free look-alikes where the app's font is proprietary):
+
+  | Theme    | Headings       | Body           | Mono           |
+  | -------- | -------------- | -------------- | -------------- |
+  | Default  | Geist          | Geist          | Geist Mono     |
+  | Vercel   | Geist          | Geist          | Geist Mono     |
+  | Claude   | Source Serif 4 | Figtree        | JetBrains Mono |
+  | Discord  | Figtree        | Noto Sans      | Source Code Pro |
+  | GitHub   | system stack   | system stack   | system mono    |
+  | Dracula  | Fira Sans      | Fira Sans      | Fira Code      |
+  | Nord     | Inter          | Inter          | JetBrains Mono |
+  | Monokai  | JetBrains Mono | IBM Plex Sans  | JetBrains Mono |
+  | Midnight | Space Grotesk  | Inter          | JetBrains Mono |
+
+- The stored theme's font and shape apply before first paint, like the colors do now
+- Fonts of themes that are not selected are not downloaded up front
+- Light and dark modes, the per-theme remembered mode and the current layout keep working, including mobile and screens under 360px
+
 ## Notes
 
 <!-- Any extra notes -->
+
+- Register themes in `src/lib/theme.ts`; token blocks live in `src/app/themes.css` (Default stays in `globals.css`)
+- Load fonts with `next/font` in the root layout (`preload: false` for non-default fonts); read the Next.js 16 font guide in `node_modules/next/dist/docs/` first
+- `layout.tsx` names the Geist variable `--font-sans`, and `globals.css` maps `--font-sans` to itself. Give each font its own variable and let themes point `--font-sans`, `--font-heading` and `--font-mono` at it
+- `--font-mono` is not mapped in `@theme inline`, so check that Geist Mono is really used today
+- Radius utilities already derive from `--radius`, so a theme only needs to override that token
+- The app fonts of Discord (gg sans) and Claude (Styrene, Tiempos) are proprietary and must not be bundled
+- Wider fonts must not break the top bar, sidebar or card truncation
+- Discord text and accent colors should meet readable contrast in both modes, including item type colors (`--item-l-min` / `--item-l-max`)
 
 ## History
 

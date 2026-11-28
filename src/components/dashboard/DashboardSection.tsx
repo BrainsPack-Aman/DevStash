@@ -18,7 +18,7 @@ export default function DashboardSection({
     <section className="animate-in fade-in space-y-4 duration-500 motion-reduce:animate-none">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+          <h2 className="heading text-lg">{title}</h2>
           {description && <p className="text-sm text-muted-foreground">{description}</p>}
         </div>
         {viewAllHref && (

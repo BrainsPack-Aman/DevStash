@@ -22,13 +22,13 @@ function SearchField({ className = "" }: { className?: string }) {
 
 export default function TopBar({ onOpenMobileSidebar }: TopBarProps) {
   return (
-    <header className="border-b px-4 md:px-6">
+    <header className="border-b bg-header-surface px-4 md:px-6">
       <div className="flex h-16 items-center gap-2 md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:gap-4">
         <div className="flex shrink-0 items-center gap-2.5">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
             DS
           </div>
-          <span className="text-lg font-semibold tracking-tight max-[22.5rem]:sr-only">DevStash</span>
+          <span className="heading text-lg max-[22.5rem]:sr-only">DevStash</span>
         </div>
 
         <SearchField className="mx-auto hidden w-full max-w-md md:block" />

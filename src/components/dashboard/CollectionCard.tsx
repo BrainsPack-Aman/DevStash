@@ -35,7 +35,7 @@ export default function CollectionCard({ collection, index = 0 }: CollectionCard
         )}
       </div>
       <div className="min-w-0">
-        <h3 className="truncate font-medium">{collection.name}</h3>
+        <h3 className="truncate font-heading font-medium">{collection.name}</h3>
         <p className="line-clamp-2 text-sm text-muted-foreground">{collection.description}</p>
       </div>
       <div className="mt-auto flex items-center justify-between text-xs text-muted-foreground">
